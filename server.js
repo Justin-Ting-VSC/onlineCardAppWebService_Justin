@@ -23,8 +23,12 @@ app.use(express.json());
 
 //start the server
 app.listen(port, () => {
-    console.log(Server running on port ${port})
+    console.log('Server running on port',port);
 });
+
+const cors = require("cors");
+
+const allowedOrigins = ["http://localhost:3000",];
 
 //Example Route: Get all cards
 app.get('/allcards', async (req, res) => {
