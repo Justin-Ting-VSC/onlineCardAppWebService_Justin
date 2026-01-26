@@ -23,7 +23,7 @@ const app = express();
 const allowedOrigins = [
     "http://localhost:3000",
     // "https://YOUR-frontend.vercel.app", // add later
-    "https://card-app-starter-team2-0uw1.onrender.com/"
+    "https://teams2-justin-c219.onrender.com/cards"
 ];
 
 app.use(
