@@ -35,7 +35,7 @@ const cors = require("cors");
 
 const allowedOrigins = [
   "http://localhost:3000",
-  // "https://YOUR-frontend.onrender.com"
+  "https://teams2-justin-c219.onrender.com"
 ];
 
 app.use(
