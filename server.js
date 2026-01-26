@@ -44,6 +44,29 @@ app.use(
 
 app.use(express.json());
 
+
+const DEMO_USER = { id: 1, username: "admin", password: "admin123" };
+
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = process.env.JWT_SECRET;
+
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  if (username !== DEMO_USER.username || password !== DEMO_USER.password) {
+    return res.status(401).json({ error: "Invalid credentials" });
+  }
+
+  // create a token using the JWT secret
+  const token = jwt.sign(
+    { id: DEMO_USER.id, username: DEMO_USER.username },
+    JWT_SECRET,
+    { expiresIn: "1h" },
+  );
+
+  res.json({ token });
+});
+
 // --- 2. ROUTES ---
 
 // GET: Fetch all cards
