@@ -6,17 +6,17 @@ const port = 3000;
 
 // Database Configuration
 const dbConfig = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
+    host: (process.env.DB_HOST || "").trim(),
+    user: (process.env.DB_USER || "").trim(),
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
-    ssl: { rejectUnauthorized: false },
+        database: (process.env.DB_NAME || "").trim(),
+  port: Number(process.env.DB_PORT) || 3306,
     waitForConnections: true,
     connectionLimit: 100,
     queueLimit: 0,
 };
 
+const pool = mysql.createPool(dbConfig);
 const app = express();
 
 // --- 1. CORS CONFIGURATION (The code you asked to implement) ---
@@ -92,7 +92,7 @@ function requireAuth(req, res, next) {
 // --- 2. ROUTES ---
 
 // GET: Fetch all cards
-app.get('/allcards', async (req,res) => {
+app.get('/allcards', requireAuth, async (req,res) => {
     try {
         let connection = await mysql.createConnection(dbConfig);
         const [rows] = await connection.execute('SELECT * FROM defaultdb.cards');
@@ -150,5 +150,5 @@ app.delete('/deletecard/:id', async (req, res) => {
 
 // --- 3. START SERVER ---
 app.listen(port, () => {
-    console.log('Server started on port, port');
+    console.log(`Server started on port, ${port}`);
 });
