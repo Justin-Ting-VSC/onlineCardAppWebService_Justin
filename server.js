@@ -23,7 +23,7 @@ const app = express();
 const allowedOrigins = [
     "http://localhost:3000",
     // "https://YOUR-frontend.vercel.app", // add later
-    "https://teams2-justin-c219.onrender.com/cards"
+    "https://teams2-justin-c219.onrender.com/"
 ];
 
 app.use(
@@ -66,6 +66,28 @@ app.post("/login", async (req, res) => {
 
   res.json({ token });
 });
+
+// Middleware to protect routes
+function requireAuth(req, res, next) {
+  const header = req.headers.authorization; // "Bearer TOKEN"
+
+  if (!header) {
+    return res.status(401).json({ error: "Authorization header required" });
+  }
+
+  const [type, token] = header.split(" ");
+  if (type !== "Bearer" || !token) {
+    return res.status(401).json({ error: "Invalid authorization format" });
+  }
+
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    req.user = payload; // attach user info to request
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: "Invalid token" });
+  }
+}
 
 // --- 2. ROUTES ---
 
